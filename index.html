@@ -1,132 +1,217 @@
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EmulatorJS Game Launcher</title>
-  <link rel="stylesheet" href="emulator.min.css">
-  <style>
-    body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 2em;
-    }
-    button {
-      display: block;
-      width: 80%;
-      max-width: 400px;
-      margin: 1em auto;
-      padding: 1em;
-      font-size: 1.2em;
-      border: none;
-      background: #333;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #555;
-    }
-    #game {
-      margin-top: 2em;
-    }
-    #drop-zone {
-      border: 2px dashed #888;
-      padding: 2em;
-      margin-top: 2em;
-      color: #aaa;
-    }
-    #drop-zone.dragover {
-      border-color: #0f0;
-      color: #0f0;
-    }
-  </style>
-</head>
-<body>
-  <h1>🎮 EmulatorJS Game Launcher</h1>
-  <div id="game-list">
-    <h2>Select a Game:</h2>
-    <button onclick="launchGame('games/mario.nes', 'nes')">Super Mario Bros (NES)</button>
-    <button onclick="launchGame('games/sonic.sms', 'sms')">Sonic (SMS)</button>
-    <button onclick="launchGame('games/pokemon.gba', 'gba')">Pokémon FireRed (GBA)</button>
-  </div>
+<html>
+    <head>
+        <title>EmulatorJS</title>
+        <script src="/js/all.js"></script>
 
-  <div id="drop-zone">
-    <strong>Or drag & drop your own ROM file here</strong>
-    <br><br>
-    <input type="file" id="file-input">
-  </div>
+        <meta name = viewport content = "width = device-width, initial-scale = 1">
 
-  <div id="game"></div>
+        <style>
+            body, html {
+                height: 100%;
+            }
 
-  <script>
-    function launchGame(path, core) {
-      startEmulator(path, core);
-    }
+            body {
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 20px;
+                margin: 0;
+                overflow: hidden;
+                background-color: #222
+            }
 
-    function startEmulator(path, core) {
-      EJS_player = "#game";
-      EJS_core = core;
-      EJS_gameUrl = path;
-      EJS_startOnLoaded = true;
+            body, #box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
-      document.getElementById("game-list").style.display = "none";
-      document.getElementById("drop-zone").style.display = "none";
+            #box {
+                color: #aaa;
+                height: 20em;
+                width: 30em;
+                max-width: 80%;
+                max-height: 80%;
+                background-color: #333;
+                border-radius: 0.4em;
+                border: 2px solid #555;
+                position: relative;
+                flex-direction: column;
+                transition-duration: 0.2s;
+                overflow: hidden
+            }
 
-      const display = document.createElement("div");
-      display.id = "display";
-      display.style = "width:100%; height:100%";
-      document.getElementById("game").appendChild(display);
+            #box:hover, #box[drag] {
+                border-color: #38f;
+                color: #ddd
+            }
 
-      const script = document.createElement("script");
-      script.src = "data/loader.js";
-      document.body.appendChild(script);
-    }
+            #input {
+                cursor: pointer;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0
+            }
 
-    function getExtension(filename) {
-      return filename.split('.').pop().toLowerCase();
-    }
+            #display {
+                width: 100%;
+                height: 100%
+            }
 
-    const fileInput = document.getElementById('file-input');
-    fileInput.addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (file) handleFile(file);
-    });
+            select, button {
+                padding: 0.6em 0.4em;
+                margin: 0.5em;
+                width: 15em;
+                max-width: 100%;
+                font-family: monospace;
+                font-weight: bold;
+                font-size: 16px;
+                background-color: #444;
+                color: #aaa;
+                border-radius: 0.4em;
+                border: 1px solid #555;
+                cursor: pointer;
+                transition-duration: 0.2s
+            }
 
-    const dropZone = document.getElementById('drop-zone');
-    dropZone.addEventListener('dragover', e => {
-      e.preventDefault();
-      dropZone.classList.add('dragover');
-    });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-    dropZone.addEventListener('drop', e => {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      if (file) handleFile(file);
-    });
+            select:hover, button:hover {
+                background-color: #666;
+                color: #ddd
+            }
+        </style>
+    </head>
 
-    function handleFile(file) {
-      const ext = getExtension(file.name);
-      const coreMap = {
-        'nes': 'fceumm',
-        'smc': 'snes9x',
-        'gba': 'mgba',
-        'gb': 'gambatte',
-        'gbc': 'gambatte',
-        'sms': 'genesis_plus_gx',
-        'gen': 'genesis_plus_gx',
-        'bin': 'genesis_plus_gx',
-        'n64': 'mupen64plus_next'
-        // add more as needed
-      };
-      const core = coreMap[ext] || prompt("Unknown file type. Enter emulator core:");
-      const blobURL = URL.createObjectURL(file);
-      startEmulator(blobURL, core);
-    }
-  </script>
+    <body>
+        <div id = box style="text-align: center;">
+            <input type = file id = input>
+            <strong>Drag ROM file or click here</strong>
+            we may not always autodetect the correct system, make sure to select the right system
+        </div>
+
+        <script>
+            input.onchange = async () => {
+                const url = new Blob([input.files[0]])
+                const parts = input.files[0].name.split(".")
+
+                const core = await (async (ext) => {
+                    if (["fds", "nes", "unif", "unf"].includes(ext))
+                        return "nes"
+
+                    if (["smc", "fig", "sfc", "gd3", "gd7", "dx2", "bsx", "swc"].includes(ext))
+                        return "snes"
+
+                    if (["z64", "n64"].includes(ext))
+                        return "n64"
+
+                    if (["pce"].includes(ext))
+                        return "pce"
+
+                    if (["ngp", "ngc"].includes(ext))
+                        return "ngp"
+
+                    if (["ws", "wsc"].includes(ext))
+                        return "ws"
+
+                    if (["col", "cv"].includes(ext))
+                        return "coleco"
+
+                    if (["d64"].includes(ext))
+                        return "vice_x64"
+                    if (["gbc"].includes(ext))
+                        return "gba"
+
+                    if (["nds", "gba", "gb", "z64", "n64"].includes(ext))
+                        return ext
+
+                    return await new Promise(resolve => {
+                        const cores = {
+                            "Nintendo 64": "n64",
+                            "Nintendo Game Boy": "gb",
+                            "Nintendo Game Boy Advance": "gba",
+                            "Nintendo DS": "nds",
+                            "Nintendo Entertainment System": "nes",
+                            "Super Nintendo Entertainment System": "snes",
+                            "PlayStation": "psx",
+                            "Virtual Boy": "vb",
+                            "Sega Mega Drive": "segaMD",
+                            "Sega Master System": "segaMS",
+                            "Sega CD": "segaCD",
+                            "Atari Lynx": "lynx",
+                            "Sega 32X": "sega32x",
+                            "Atari Jaguar": "jaguar",
+                            "Sega Game Gear": "segaGG",
+                            "Sega Saturn": "segaSaturn",
+                            "Atari 7800": "atari7800",
+                            "Atari 2600": "atari2600",
+                            "NEC TurboGrafx-16/SuperGrafx/PC Engine": "pce",
+                            "NEC PC-FX": "pcfx",
+                            "SNK NeoGeo Pocket (Color)": "ngp",
+                            "Bandai WonderSwan (Color)": "ws",
+                            "ColecoVision": "coleco",
+                            "Commodore 64": "vice_x64"
+                        }
+
+                        const button = document.createElement("button")
+                        const select = document.createElement("select")
+
+                        for (const type in cores) {
+                            const option = document.createElement("option")
+
+                            option.value = cores[type]
+                            option.textContent = type
+                            select.appendChild(option)
+                        }
+
+                        button.onclick = () => resolve(select[select.selectedIndex].value)
+                        button.textContent = "Load game"
+                        box.innerHTML = ""
+
+                        box.appendChild(select)
+                        box.appendChild(button)
+                    })
+                })(parts.pop())
+
+                const div = document.createElement("div")
+                const sub = document.createElement("div")
+                const script = document.createElement("script")
+
+                sub.id = "game"
+                div.id = "display"
+
+                box.remove()
+                div.appendChild(sub)
+                document.body.appendChild(div)
+
+                window.EJS_player = "#game";
+                window.EJS_gameName = parts.shift();
+                window.EJS_biosUrl = "";
+                window.EJS_gameUrl = url;
+                window.EJS_core = core;
+                window.EJS_pathtodata = "data/";
+                window.EJS_startOnLoaded = true;
+
+ 
+                
+                script.src = "data/loader.js";
+                document.body.appendChild(script);
+            }
+            function detectAdBlock(url) {
+                let adBlockEnabled = false;
+                try {
+                    window.EJS_AdUrl = document.querySelector('iframe[src="'+window.EJS_AdUrl+'"]').src;
+                } catch (e) {
+                    adBlockEnabled = true;
+                }
+                if (adBlockEnabled) {
+                    window.EJS_adBlocked(url);
+                }
+            }
+            box.ondragover = () => box.setAttribute("drag", true);
+            box.ondragleave = () => box.removeAttribute("drag");
+        </script>
 </body>
 </html>
