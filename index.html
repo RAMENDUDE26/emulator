@@ -128,7 +128,8 @@
       EJS_gameUrl = path;
       EJS_startOnLoaded = true;
 
-      document.body.innerHTML = '';
+      document.querySelector('header').style.display = 'none';
+      document.getElementById('game-list').style.display = 'none';
 
       const display = document.createElement("div");
       display.id = "display";
