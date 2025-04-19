@@ -74,13 +74,30 @@
       <div id="core-select" style="display:none;">
         <p>Please select the game system:</p>
         <select id="core-dropdown">
-          <option value="fceumm">NES</option>
-          <option value="snes9x">SNES</option>
-          <option value="mgba">Game Boy Advance</option>
-          <option value="gambatte">Game Boy / GBC</option>
-          <option value="genesis_plus_gx">Sega Genesis / SMS</option>
-          <option value="mupen64plus_next">Nintendo 64</option>
-          <!-- Add more as needed -->
+          <option value="n64">Nintendo 64</option>
+          <option value="gb">Nintendo Game Boy</option>
+          <option value="gba">Nintendo Game Boy Advance</option>
+          <option value="nds">Nintendo DS</option>
+          <option value="nes">Nintendo Entertainment System</option>
+          <option value="snes">Super Nintendo Entertainment System</option>
+          <option value="psx">PlayStation</option>
+          <option value="vb">Virtual Boy</option>
+          <option value="segaMD">Sega Mega Drive</option>
+          <option value="segaMS">Sega Master System</option>
+          <option value="segaCD">Sega CD</option>
+          <option value="lynx">Atari Lynx</option>
+          <option value="sega32x">Sega 32X</option>
+          <option value="jaguar">Atari Jaguar</option>
+          <option value="segaGG">Sega Game Gear</option>
+          <option value="segaSaturn">Sega Saturn</option>
+          <option value="atari7800">Atari 7800</option>
+          <option value="atari2600">Atari 2600</option>
+          <option value="pce">NEC TurboGrafx-16/SuperGrafx/PC Engine</option>
+          <option value="pcfx">NEC PC-FX</option>
+          <option value="ngp">SNK NeoGeo Pocket (Color)</option>
+          <option value="ws">Bandai WonderSwan (Color)</option>
+          <option value="coleco">ColecoVision</option>
+          <option value="vice_x64">Commodore 64</option>
         </select>
         <br><br>
         <button onclick="confirmCoreSelection()">Launch</button>
@@ -152,14 +169,36 @@
       const coreMap = {
         'nes': 'fceumm',
         'smc': 'snes9x',
+        'sfc': 'snes9x',
         'gba': 'mgba',
         'gb': 'gambatte',
         'gbc': 'gambatte',
+        'nds': 'melonds',
+        'n64': 'mupen64plus_next',
+        'z64': 'mupen64plus_next',
+        'v64': 'mupen64plus_next',
+        'psx': 'mednafen_psx_hw',
+        'vb': 'beetle_vb',
         'sms': 'genesis_plus_gx',
+        'gg': 'genesis_plus_gx',
         'gen': 'genesis_plus_gx',
         'bin': 'genesis_plus_gx',
-        'n64': 'mupen64plus_next'
-        // add more as needed
+        'cue': 'genesis_plus_gx',
+        'iso': 'yabause',
+        '32x': 'picodrive',
+        'lynx': 'handy',
+        'jag': 'virtualjaguar',
+        'a78': 'prosystem',
+        'a26': 'stella2014',
+        'pce': 'mednafen_pce',
+        'pcfx': 'mednafen_pcfx',
+        'ngp': 'mednafen_ngp',
+        'ws': 'mednafen_wswan',
+        'wsr': 'mednafen_wswan',
+        'col': 'gearcoleco',
+        'd64': 'vice_x64',
+        'crt': 'vice_x64',
+        'prg': 'vice_x64'
       };
 
       if (ext === 'zip' || !coreMap[ext]) {
