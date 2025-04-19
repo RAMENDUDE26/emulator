@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EmulatorJS Game Launcher</title>
+  <title>Emulator</title>
   <link rel="stylesheet" href="emulator.min.css">
   <style>
     body {
@@ -66,7 +66,7 @@
 </head>
 <body>
   <header>
-    <h1>🎮 EmulatorJS</h1>
+    <h1>🎮 Emulator</h1>
     <div id="drop-zone">
       <strong>Drag and drop your own ROM file here</strong>
       <br><br>
@@ -106,7 +106,7 @@
   </header>
 
   <section id="game-list">
-    <h2>Available Games</h2>
+    <h2>Games</h2>
     <button onclick="launchGame('games/Mappy (J) [p1].nes', 'nes')">Mappy (NES)</button>
     <button onclick="launchGame('games/mario.nes', 'nes')">Super Mario Bros (NES)</button>
     <button onclick="launchGame('games/sonic.sms', 'sms')">Sonic (SMS)</button>
@@ -128,8 +128,7 @@
       EJS_gameUrl = path;
       EJS_startOnLoaded = true;
 
-      document.getElementById("game-list").style.display = "none";
-      document.getElementById("drop-zone").style.display = "none";
+      document.body.innerHTML = '';
 
       const display = document.createElement("div");
       display.id = "display";
