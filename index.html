@@ -22,25 +22,39 @@
       padding: 2em;
       text-align: center;
     }
-    button {
-      display: block;
-      width: 80%;
-      max-width: 400px;
-      margin: 1em auto;
+    .game-section h3 {
+      margin-top: 2em;
+    }
+    .game-card {
+      display: inline-block;
+      width: 200px;
+      margin: 1em;
+      background: #222;
+      border-radius: 10px;
       padding: 1em;
-      font-size: 1.2em;
+    }
+    .game-card img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .game-card button {
+      margin-top: 1em;
+      width: 100%;
+      padding: 0.5em;
+      font-size: 1em;
       border: none;
       background: #333;
       color: white;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s;
     }
-    button:hover {
+    .game-card button:hover {
       background: #555;
     }
     #game {
       margin-top: 2em;
+      text-align: center;
     }
     #drop-zone {
       border: 2px dashed #888;
@@ -106,18 +120,51 @@
   </header>
 
   <section id="game-list">
-    <h2>Games</h2>
-    <button onclick="launchGame('games/Mappy (J) [p1].nes', 'nes')">Mappy (NES)</button>
-    <button onclick="launchGame('games/Baseball (USA, Europe).nes', 'nes')">Baseball (NES)</button>
-    <button onclick="launchGame('games/Donkey Kong (JU) [p1].nes', 'nes')">Donkey Kong (NES)</button>
-    <button onclick="launchGame('games/Donkey Kong Jr. (JU) [p1].nes', 'nes')">Donkey Kong Jr. (NES)</button>
-    <button onclick="launchGame('games/Excitebike (Japan, USA).nes', 'nes')">Excitebike (NES)</button>
-    <button onclick="launchGame('games/Mario Kart 64 (E) (V1.1) [!].z64', 'n64')">Mario Kart 64 (N64)</button>
-    <button onclick="launchGame('games/Super Mario Bros (PC10).nes', 'nes')">Super Mario Bros. (NES)</button>
-    <button onclick="launchGame('games/Super Mario 64 (U) [!].z64', 'n64')">Super Mario 64 (N64)</button>
+    <h2>🎮 Games</h2>
+    <div class="game-section">
+      <h3>NES</h3>
+      <div class="game-card">
+        <img src="boxart/mappy.jpg" alt="Mappy">
+        <button onclick="launchGame('games/Mappy (J) [p1].nes', 'nes')">Mappy</button>
+      </div>
+      <div class="game-card">
+        <img src="boxart/baseball.jpg" alt="Baseball">
+        <button onclick="launchGame('games/Baseball (USA, Europe).nes', 'nes')">Baseball</button>
+      </div>
+      <div class="game-card">
+        <img src="boxart/donkeykong.jpg" alt="Donkey Kong">
+        <button onclick="launchGame('games/Donkey Kong (JU) [p1].nes', 'nes')">Donkey Kong</button>
+      </div>
+      <div class="game-card">
+        <img src="boxart/dkjr.jpg" alt="Donkey Kong Jr.">
+        <button onclick="launchGame('games/Donkey Kong Jr. (JU) [p1].nes', 'nes')">Donkey Kong Jr.</button>
+      </div>
+      <div class="game-card">
+        <img src="boxart/excitebike.jpg" alt="Excitebike">
+        <button onclick="launchGame('games/Excitebike (Japan, USA).nes', 'nes')">Excitebike</button>
+      </div>
+      <div class="game-card">
+        <img src="boxart/smb.jpg" alt="Super Mario Bros.">
+        <button onclick="launchGame('games/Super Mario Bros (PC10).nes', 'nes')">Super Mario Bros.</button>
+      </div>
+    </div>
+    <div class="game-section">
+      <h3>Nintendo 64</h3>
+      <div class="game-card">
+        <img src="boxart/mariokart64.jpg" alt="Mario Kart 64">
+        <button onclick="launchGame('games/Mario Kart 64 (E) (V1.1) [!].z64', 'n64')">Mario Kart 64</button>
+      </div>
+      <div class="game-card">
+        <img src="boxart/sm64.jpg" alt="Super Mario 64">
+        <button onclick="launchGame('games/Super Mario 64 (U) [!].z64', 'n64')">Super Mario 64</button>
+      </div>
+    </div>
   </section>
 
   <div id="game"></div>
+<div id="back-button" style="text-align:center; display:none; margin-top: 1em;">
+  <button onclick="goBackToMenu()">🔙 Back to Menu</button>
+</div>
 
   <script>
     let pendingROMBlob = null;
@@ -127,23 +174,31 @@
     }
 
     function startEmulator(path, core) {
-      EJS_player = "#game";
-      EJS_core = core;
-      EJS_gameUrl = path;
-      EJS_startOnLoaded = true;
-      EJS_fullscreen = true;
+  EJS_player = "#game";
+  EJS_core = core;
+  EJS_gameUrl = path;
+  EJS_startOnLoaded = true;
+  EJS_fullscreen = true;
 
-      document.querySelector('header').style.display = 'none';
-      document.getElementById('game-list').style.display = 'none';
+  document.querySelector("header").style.display = "none";
+  document.getElementById("game-list").style.display = "none";
+  document.getElementById("back-button").style.display = "block";
 
-      const display = document.createElement("div");
-      display.id = "display";
-      display.style = "width:100%; height:100%";
-      document.getElementById("game").appendChild(display);
+  const display = document.createElement("div");
+  display.id = "display";
+  display.style = "width:100%; height:100%";
+  document.getElementById("game").appendChild(display);
 
-      const script = document.createElement("script");
-      script.src = "data/loader.js";
-      document.body.appendChild(script);
+  // Remove previous loader.js if it exists
+  const existingScript = document.querySelector('script[src="data/loader.js"]');
+  if (existingScript) {
+    existingScript.remove();
+  }
+
+  // Add fresh loader
+  const script = document.createElement("script");
+  script.src = "data/loader.js";
+  document.body.appendChild(script);
     }
 
     function getExtension(filename) {
@@ -217,12 +272,26 @@
     }
 
     function confirmCoreSelection() {
-      const dropdown = document.getElementById('core-dropdown');
-      const selectedCore = dropdown.value;
-      if (pendingROMBlob && selectedCore) {
-        startEmulator(pendingROMBlob, selectedCore);
-      }
-    }
-  </script>
+  const dropdown = document.getElementById('core-dropdown');
+  const selectedCore = dropdown.value;
+  if (pendingROMBlob && selectedCore) {
+    startEmulator(pendingROMBlob, selectedCore);
+  }
+}
+
+    function goBackToMenu() {
+  // Clear the emulator display
+  const gameArea = document.getElementById("game");
+  gameArea.innerHTML = "";
+
+  // Show the main UI again
+  document.querySelector("header").style.display = "block";
+  document.getElementById("game-list").style.display = "block";
+
+  // Hide the back button
+  document.getElementById("back-button").style.display = "none";
+}
+  
+</script>
 </body>
 </html>
