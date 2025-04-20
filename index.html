@@ -180,21 +180,25 @@
   EJS_startOnLoaded = true;
   EJS_fullscreen = true;
 
-  document.querySelector('header').style.display = 'none';
-  document.getElementById('game-list').style.display = 'none';
-  document.getElementById('back-button').style.display = 'block';
+  document.querySelector("header").style.display = "none";
+  document.getElementById("game-list").style.display = "none";
+  document.getElementById("back-button").style.display = "block";
 
-      document.querySelector('header').style.display = 'none';
-      document.getElementById('game-list').style.display = 'none';
+  const display = document.createElement("div");
+  display.id = "display";
+  display.style = "width:100%; height:100%";
+  document.getElementById("game").appendChild(display);
 
-      const display = document.createElement("div");
-      display.id = "display";
-      display.style = "width:100%; height:100%";
-      document.getElementById("game").appendChild(display);
+  // Remove previous loader.js if it exists
+  const existingScript = document.querySelector('script[src="data/loader.js"]');
+  if (existingScript) {
+    existingScript.remove();
+  }
 
-      const script = document.createElement("script");
-      script.src = "data/loader.js";
-      document.body.appendChild(script);
+  // Add fresh loader
+  const script = document.createElement("script");
+  script.src = "data/loader.js";
+  document.body.appendChild(script);
     }
 
     function getExtension(filename) {
@@ -287,9 +291,7 @@
   // Hide the back button
   document.getElementById("back-button").style.display = "none";
 }
-  function goBackToMenu() {
-    location.reload();
-  }
+  
 </script>
 </body>
 </html>
