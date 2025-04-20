@@ -276,7 +276,16 @@
 }
     }
     function goBackToMenu() {
-  location.reload();
+  // Clear the emulator display
+  const gameArea = document.getElementById("game");
+  gameArea.innerHTML = "";
+
+  // Show the main UI again
+  document.querySelector("header").style.display = "block";
+  document.getElementById("game-list").style.display = "block";
+
+  // Hide the back button
+  document.getElementById("back-button").style.display = "none";
 }
   function goBackToMenu() {
     location.reload();
