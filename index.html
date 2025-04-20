@@ -352,6 +352,8 @@ function launchGame(path, core) {
 }
 
 function startEmulator(path, core) {
+  console.log("Starting emulator with", path, core);
+
   EJS_player = "#game";
   EJS_core = core;
   EJS_gameUrl = path;
