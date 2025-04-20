@@ -161,7 +161,8 @@
     </div>
   </section>
 
-  <div id="game">
+  <div id="game"></div>
+<div id="back-button" style="text-align:center; display:none; margin-top: 1em;">
   <button onclick="goBackToMenu()">🔙 Back to Menu</button>
 </div>
 
@@ -173,11 +174,15 @@
     }
 
     function startEmulator(path, core) {
-      EJS_player = "#game";
-      EJS_core = core;
-      EJS_gameUrl = path;
-      EJS_startOnLoaded = true;
-      EJS_fullscreen = true;
+  EJS_player = "#game";
+  EJS_core = core;
+  EJS_gameUrl = path;
+  EJS_startOnLoaded = true;
+  EJS_fullscreen = true;
+
+  document.querySelector('header').style.display = 'none';
+  document.getElementById('game-list').style.display = 'none';
+  document.getElementById('back-button').style.display = 'block';
 
       document.querySelector('header').style.display = 'none';
       document.getElementById('game-list').style.display = 'none';
@@ -271,7 +276,10 @@
 }
     }
     function goBackToMenu() {
-    document.location.reload();
+  location.reload();
+}
+  function goBackToMenu() {
+    location.reload();
   }
 </script>
 </body>
