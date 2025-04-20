@@ -161,7 +161,9 @@
     </div>
   </section>
 
-  <div id="game"></div>
+  <div id="game">
+  <button onclick="goBackToMenu()">🔙 Back to Menu</button>
+</div>
 
   <script>
     let pendingROMBlob = null;
@@ -261,12 +263,16 @@
     }
 
     function confirmCoreSelection() {
-      const dropdown = document.getElementById('core-dropdown');
-      const selectedCore = dropdown.value;
-      if (pendingROMBlob && selectedCore) {
-        startEmulator(pendingROMBlob, selectedCore);
-      }
+  const dropdown = document.getElementById('core-dropdown');
+  const selectedCore = dropdown.value;
+  if (pendingROMBlob && selectedCore) {
+    startEmulator(pendingROMBlob, selectedCore);
+  }
+}
     }
-  </script>
+    function goBackToMenu() {
+    document.location.reload();
+  }
+</script>
 </body>
 </html>
