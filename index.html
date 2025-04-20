@@ -369,6 +369,9 @@ function startEmulator(path, core) {
 
   const existingScript = document.querySelector('script[src="data/loader.js"]');
   if (existingScript) existingScript.remove();
+
+  // 🚀 This is the important line you were missing!
+  EJS_load(); // ← This boots the emulator with the set configs
 }
 </script>
 </body>
