@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://www.emulatorjs.com/loader.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clowney's Emulator</title>
@@ -368,10 +369,6 @@ function startEmulator(path, core) {
 
   const existingScript = document.querySelector('script[src="data/loader.js"]');
   if (existingScript) existingScript.remove();
-
-  const script = document.createElement("script");
-  script.src = "data/loader.js";
-  document.body.appendChild(script);
 }
 </script>
 </body>
