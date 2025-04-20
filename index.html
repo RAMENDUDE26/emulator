@@ -1,57 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://www.emulatorjs.com/loader.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clowney's Emulator</title>
   <link rel="stylesheet" href="emulator.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
   <style>
-   
-   body, html {
-  margin: 0;
-  background: black;
-  font-family: monospace;
-  font-weight: bold;
-  font-size: 20px;
-  color: #aaa;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    header, section {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2em;
-  text-align: center;
-  background: transparent; /* 👈 this line makes it see-through */
-}
-    h1 {
-      font-size: 2.5em;
-      font-family: "Barriecito", cursive;
+    header {
+      padding: 2em;
+      background: #1c1c1c;
+      text-align: center;
+    }
+    section {
+      padding: 2em;
+      text-align: center;
+    }
+    button {
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin: 1em auto;
+      padding: 1em;
+      font-size: 1.2em;
+      border: none;
+      background: #333;
       color: white;
-      margin-bottom: 1em;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 0.5em 1em;
-      border-radius: 15px;
-      border: 2px solid white;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #555;
     }
     #game {
-      text-align: center;
-      z-index: 1;
-      position: relative;
+      margin-top: 2em;
     }
     #drop-zone {
       border: 2px dashed #888;
@@ -59,322 +48,181 @@
       margin: 2em auto;
       color: #aaa;
       max-width: 600px;
-      text-align: center;
     }
     #drop-zone.dragover {
-      border-color: #38f;
-      color: #ddd;
+      border-color: #0f0;
+      color: #0f0;
     }
-    .game-section h3 {
-      margin-top: 2em;
-    }
-    .game-card {
-      display: inline-block;
-      width: 200px;
-      margin: 1em;
-      background: #333;
-      border-radius: 10px;
-      padding: 1em;
-      border: 2px solid #555;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .game-card:hover {
-      border-color: #38f;
-      color: #ddd;
-    }
-    .game-card img {
-      width: 100%;
-      border-radius: 6px;
-    }
-    .game-card button {
-      margin-top: 1em;
-      width: 100%;
-      padding: 0.6em 0.4em;
-      font-size: 16px;
-      font-family: monospace;
-      font-weight: bold;
-      background-color: #444;
-      color: #aaa;
-      border-radius: 0.4em;
-      border: 1px solid #555;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .game-card button:hover {
-      background-color: #666;
-      color: #ddd;
-    }
-    #back-button {
-      text-align: center;
-      display: none;
-      margin-top: 1em;
-      z-index: 1;
-      position: relative;
-    }
-    #back-button button,
-    #core-select button,
     select {
-      padding: 0.6em 0.4em;
-      margin: 0.5em;
-      width: 15em;
-      max-width: 100%;
-      font-family: monospace;
-      font-weight: bold;
-      font-size: 16px;
-      background-color: #444;
-      color: #aaa;
-      border-radius: 0.4em;
-      border: 1px solid #555;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    #back-button button:hover,
-    #core-select button:hover,
-    select:hover {
-      background-color: #666;
-      color: #ddd;
+      padding: 0.5em;
+      font-size: 1em;
+      margin-top: 1em;
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
-<canvas id="spaceCanvas"></canvas>
-<header>
-  <h1>🎮 Clowney's Emulator 🎮</h1>
-  <div id="drop-zone">
-    <strong>Drag and drop your own ROM file here</strong>
-    <br><br>
-    <input type="file" id="file-input">
-    <div id="core-select" style="display:none;">
-      <p>Please select the game system:</p>
-      <select id="core-dropdown">
-        <option value="n64">Nintendo 64</option>
-        <option value="gb">Nintendo Game Boy</option>
-        <option value="gba">Nintendo Game Boy Advance</option>
-        <option value="nds">Nintendo DS</option>
-        <option value="nes">Nintendo Entertainment System</option>
-        <option value="snes">Super Nintendo Entertainment System</option>
-        <option value="psx">PlayStation</option>
-        <option value="vb">Virtual Boy</option>
-        <option value="segaMD">Sega Mega Drive</option>
-        <option value="segaMS">Sega Master System</option>
-        <option value="segaCD">Sega CD</option>
-        <option value="lynx">Atari Lynx</option>
-        <option value="sega32x">Sega 32X</option>
-        <option value="jaguar">Atari Jaguar</option>
-        <option value="segaGG">Sega Game Gear</option>
-        <option value="segaSaturn">Sega Saturn</option>
-        <option value="atari7800">Atari 7800</option>
-        <option value="atari2600">Atari 2600</option>
-        <option value="pce">NEC TurboGrafx-16/SuperGrafx/PC Engine</option>
-        <option value="pcfx">NEC PC-FX</option>
-        <option value="ngp">SNK NeoGeo Pocket (Color)</option>
-        <option value="ws">Bandai WonderSwan (Color)</option>
-        <option value="coleco">ColecoVision</option>
-        <option value="vice_x64">Commodore 64</option>
-      </select>
+  <header>
+    <h1>🎮Clowney's Emulator🎮</h1>
+    <div id="drop-zone">
+      <strong>Drag and drop your own ROM file here</strong>
       <br><br>
-      <button onclick="confirmCoreSelection()">Launch</button>
+      <input type="file" id="file-input">
+      <div id="core-select" style="display:none;">
+        <p>Please select the game system:</p>
+        <select id="core-dropdown">
+          <option value="n64">Nintendo 64</option>
+          <option value="gb">Nintendo Game Boy</option>
+          <option value="gba">Nintendo Game Boy Advance</option>
+          <option value="nds">Nintendo DS</option>
+          <option value="nes">Nintendo Entertainment System</option>
+          <option value="snes">Super Nintendo Entertainment System</option>
+          <option value="psx">PlayStation</option>
+          <option value="vb">Virtual Boy</option>
+          <option value="segaMD">Sega Mega Drive</option>
+          <option value="segaMS">Sega Master System</option>
+          <option value="segaCD">Sega CD</option>
+          <option value="lynx">Atari Lynx</option>
+          <option value="sega32x">Sega 32X</option>
+          <option value="jaguar">Atari Jaguar</option>
+          <option value="segaGG">Sega Game Gear</option>
+          <option value="segaSaturn">Sega Saturn</option>
+          <option value="atari7800">Atari 7800</option>
+          <option value="atari2600">Atari 2600</option>
+          <option value="pce">NEC TurboGrafx-16/SuperGrafx/PC Engine</option>
+          <option value="pcfx">NEC PC-FX</option>
+          <option value="ngp">SNK NeoGeo Pocket (Color)</option>
+          <option value="ws">Bandai WonderSwan (Color)</option>
+          <option value="coleco">ColecoVision</option>
+          <option value="vice_x64">Commodore 64</option>
+        </select>
+        <br><br>
+        <button onclick="confirmCoreSelection()">Launch</button>
+      </div>
     </div>
-  </div>
-</header>
-<section id="game-list" class="game-section">
-  <h2>🎮 Games</h2>
+  </header>
 
-<div class="game-section">
-  <h3>NES</h3>
-  <div class="game-card">
-    <img src="boxart/mappy.jpg" alt="Mappy">
-    <button onclick="launchGame('games/Mappy (J) [p1].nes', 'nes')">Mappy</button>
-  </div>
-  <div class="game-card">
-    <img src="boxart/baseball.jpg" alt="Baseball">
-    <button onclick="launchGame('games/Baseball (USA, Europe).nes', 'nes')">Baseball</button>
-  </div>
-  <div class="game-card">
-    <img src="boxart/donkeykong.jpg" alt="Donkey Kong">
-    <button onclick="launchGame('games/Donkey Kong (JU) [p1].nes', 'nes')">Donkey Kong</button>
-  </div>
-  <div class="game-card">
-    <img src="boxart/dkjr.jpg" alt="Donkey Kong Jr.">
-    <button onclick="launchGame('games/Donkey Kong Jr. (JU) [p1].nes', 'nes')">Donkey Kong Jr.</button>
-  </div>
-  <div class="game-card">
-    <img src="boxart/excitebike.jpg" alt="Excitebike">
-    <button onclick="launchGame('games/Excitebike (Japan, USA).nes', 'nes')">Excitebike</button>
-  </div>
-  <div class="game-card">
-    <img src="boxart/smb.jpg" alt="Super Mario Bros.">
-    <button onclick="launchGame('games/Super Mario Bros (PC10).nes', 'nes')">Super Mario Bros.</button>
-  </div>
-</div>
+  <section id="game-list">
+    <h2>Games</h2>
+    <button onclick="launchGame('games/Mappy (J) [p1].nes', 'nes')">Mappy (NES)</button>
+    <button onclick="launchGame('games/Baseball (USA, Europe).nes', 'nes')">Baseball (NES)</button>
+    <button onclick="launchGame('games/Donkey Kong (JU) [p1].nes', 'nes')">Donkey Kong (NES)</button>
+    <button onclick="launchGame('games/Donkey Kong Jr. (JU) [p1].nes', 'nes')">Donkey Kong Jr. (NES)</button>
+    <button onclick="launchGame('games/Excitebike (Japan, USA).nes', 'nes')">Excitebike (NES)</button>
+    <button onclick="launchGame('games/Mario Kart 64 (E) (V1.1) [!].z64', 'n64')">Mario Kart 64 (N64)</button>
+    <button onclick="launchGame('games/Super Mario Bros (PC10).nes', 'nes')">Super Mario Bros. (NES)</button>
+    <button onclick="launchGame('games/Super Mario 64 (U) [!].z64', 'n64')">Super Mario 64 (N64)</button>
+  </section>
 
-<div class="game-section">
-  <h3>Nintendo 64</h3>
-  <div class="game-card">
-    <img src="boxart/mariokart64.jpg" alt="Mario Kart 64">
-    <button onclick="launchGame('games/Mario Kart 64 (E) (V1.1) [!].z64', 'n64')">Mario Kart 64</button>
-  </div>
-  <div class="game-card">
-    <img src="boxart/sm64.jpg" alt="Super Mario 64">
-    <button onclick="launchGame('games/Super Mario 64 (U) [!].z64', 'n64')">Super Mario 64</button>
-  </div>
-</div>
+  <div id="game"></div>
 
-</section>
-<div id="game"></div>
-<div id="back-button"><button onclick="location.reload()">🔙 Back to Menu</button></div>
-<script>
-const canvas = document.getElementById('spaceCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const stars = [];
-for (let i = 0; i < 200; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2,
-    opacity: Math.random(),
-    velocity: Math.random() * 0.5 + 0.1
-  });
-}
-let mouseX = canvas.width / 2;
-let mouseY = canvas.height / 2;
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let star of stars) {
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${star.opacity})`;
-    ctx.fill();
-    star.x += (canvas.width / 2 - mouseX) * star.velocity * 0.01;
-    star.y += (canvas.height / 2 - mouseY) * star.velocity * 0.01;
-    if (star.x > canvas.width) star.x = 0;
-    if (star.x < 0) star.x = canvas.width;
-    if (star.y > canvas.height) star.y = 0;
-    if (star.y < 0) star.y = canvas.height;
-  }
-  requestAnimationFrame(animate);
-}
-animate();
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-window.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
-const fileInput = document.getElementById('file-input');
-const dropZone = document.getElementById('drop-zone');
-let pendingROMBlob = null;
+  <script>
+    let pendingROMBlob = null;
 
-const coreMap = {
-  'nes':   'fceumm',
-  'smc':   'snes9x',
-  'sfc':   'snes9x',
-  'gba':   'mgba',
-  'gb':    'gambatte',
-  'gbc':   'gambatte',
-  'nds':   'melonds',
-  'n64':   'mupen64plus_next',
-  'z64':   'mupen64plus_next',
-  'v64':   'mupen64plus_next',
-  'psx':   'mednafen_psx_hw',
-  'vb':    'beetle_vb',
-  'sms':   'genesis_plus_gx',
-  'gg':    'genesis_plus_gx',
-  'gen':   'genesis_plus_gx',
-  'bin':   'genesis_plus_gx',
-  'cue':   'genesis_plus_gx',
-  'iso':   'yabause',
-  '32x':   'picodrive',
-  'lynx':  'handy',
-  'jag':   'virtualjaguar',
-  'a78':   'prosystem',
-  'a26':   'stella2014',
-  'pce':   'mednafen_pce',
-  'pcfx':  'mednafen_pcfx',
-  'ngp':   'mednafen_ngp',
-  'ws':    'mednafen_wswan',
-  'wsr':   'mednafen_wswan',
-  'col':   'gearcoleco',
-  'd64':   'vice_x64',
-  'crt':   'vice_x64',
-  'prg':   'vice_x64'
-};
+    function launchGame(path, core) {
+      startEmulator(path, core);
+    }
 
-function getExtension(filename) {
-  return filename.split('.').pop().toLowerCase();
-}
+    function startEmulator(path, core) {
+      EJS_player = "#game";
+      EJS_core = core;
+      EJS_gameUrl = path;
+      EJS_startOnLoaded = true;
+      EJS_fullscreen = true;
 
-fileInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (file) handleFile(file);
-});
+      document.querySelector('header').style.display = 'none';
+      document.getElementById('game-list').style.display = 'none';
 
-dropZone.addEventListener('dragover', e => {
-  e.preventDefault();
-  dropZone.classList.add('dragover');
-});
+      const display = document.createElement("div");
+      display.id = "display";
+      display.style = "width:100%; height:100%";
+      document.getElementById("game").appendChild(display);
 
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+      const script = document.createElement("script");
+      script.src = "data/loader.js";
+      document.body.appendChild(script);
+    }
 
-dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) handleFile(file);
-});
+    function getExtension(filename) {
+      return filename.split('.').pop().toLowerCase();
+    }
 
-function handleFile(file) {
-  const ext = getExtension(file.name);
-  if (ext === 'zip' || !coreMap[ext]) {
-    pendingROMBlob = URL.createObjectURL(file);
-    document.getElementById('core-select').style.display = 'block';
-  } else {
-    const core = coreMap[ext];
-    const blobURL = URL.createObjectURL(file);
-    startEmulator(blobURL, core);
-  }
-}
+    const fileInput = document.getElementById('file-input');
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) handleFile(file);
+    });
 
-function confirmCoreSelection() {
-  const dropdown = document.getElementById('core-dropdown');
-  const selectedCore = dropdown.value;
-  if (pendingROMBlob && selectedCore) {
-    startEmulator(pendingROMBlob, selectedCore);
-  }
-}
+    const dropZone = document.getElementById('drop-zone');
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    });
 
-function launchGame(path, core) {
-  startEmulator(path, core);
-}
+    function handleFile(file) {
+      const ext = getExtension(file.name);
+      const coreMap = {
+        'nes': 'fceumm',
+        'smc': 'snes9x',
+        'sfc': 'snes9x',
+        'gba': 'mgba',
+        'gb': 'gambatte',
+        'gbc': 'gambatte',
+        'nds': 'melonds',
+        'n64': 'mupen64plus_next',
+        'z64': 'mupen64plus_next',
+        'v64': 'mupen64plus_next',
+        'psx': 'mednafen_psx_hw',
+        'vb': 'beetle_vb',
+        'sms': 'genesis_plus_gx',
+        'gg': 'genesis_plus_gx',
+        'gen': 'genesis_plus_gx',
+        'bin': 'genesis_plus_gx',
+        'cue': 'genesis_plus_gx',
+        'iso': 'yabause',
+        '32x': 'picodrive',
+        'lynx': 'handy',
+        'jag': 'virtualjaguar',
+        'a78': 'prosystem',
+        'a26': 'stella2014',
+        'pce': 'mednafen_pce',
+        'pcfx': 'mednafen_pcfx',
+        'ngp': 'mednafen_ngp',
+        'ws': 'mednafen_wswan',
+        'wsr': 'mednafen_wswan',
+        'col': 'gearcoleco',
+        'd64': 'vice_x64',
+        'crt': 'vice_x64',
+        'prg': 'vice_x64'
+      };
 
-function startEmulator(path, core) {
-  console.log("Starting emulator with", path, core);
+      if (ext === 'zip' || !coreMap[ext]) {
+        pendingROMBlob = URL.createObjectURL(file);
+        document.getElementById('core-select').style.display = 'block';
+      } else {
+        const core = coreMap[ext];
+        const blobURL = URL.createObjectURL(file);
+        startEmulator(blobURL, core);
+      }
+    }
 
-  EJS_player = "#game";
-  EJS_core = core;
-  EJS_gameUrl = path;
-  EJS_startOnLoaded = true;
-  EJS_fullscreen = true;
-
-  document.querySelector("header").style.display = "none";
-  document.getElementById("game-list").style.display = "none";
-  document.getElementById("back-button").style.display = "block";
-
-  const display = document.createElement("div");
-  display.id = "display";
-  display.style = "width:100%; height:100%";
-  document.getElementById("game").appendChild(display);
-
-  const existingScript = document.querySelector('script[src="data/loader.js"]');
-  if (existingScript) existingScript.remove();
-
-  // 🚀 This is the important line you were missing!
-  EJS_load(); // ← This boots the emulator with the set configs
-}
-</script>
+    function confirmCoreSelection() {
+      const dropdown = document.getElementById('core-dropdown');
+      const selectedCore = dropdown.value;
+      if (pendingROMBlob && selectedCore) {
+        startEmulator(pendingROMBlob, selectedCore);
+      }
+    }
+  </script>
 </body>
 </html>
