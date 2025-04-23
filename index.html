@@ -416,26 +416,31 @@ const main = document.getElementById('bg-main');
 const blur = document.getElementById('bg-blur');
 
 function changeBackground() {
+  // Fade out
   main.style.opacity = 0;
   blur.style.opacity = 0;
 
   const gif = gifs[current];
   current = (current + 1) % gifs.length;
 
+  // Wait for fade out, then swap source and fade in
   setTimeout(() => {
     main.src = gif;
     blur.src = gif;
 
-    main.onload = () => { main.style.opacity = 1 };
-    blur.onload = () => { blur.style.opacity = 1 };
-  }, 200);
+    // Wait until image is loaded, then fade in
+    main.onload = () => {
+      main.style.opacity = 1;
+    };
+    blur.onload = () => {
+      blur.style.opacity = 1;
+    };
+  }, 1000); // wait for fade-out duration (matches CSS transition)
 }
-
-main.onload = () => main.style.opacity = 1;
-blur.onload = () => blur.style.opacity = 1;
 
 changeBackground();
 bgInterval = setInterval(changeBackground, 10000);
+
 
 </script>
 </body>
