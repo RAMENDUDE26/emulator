@@ -14,10 +14,27 @@
       padding: 0;
     }
     header {
-      padding: 2em;
-      background: #1c1c1c;
-      text-align: center;
-    }
+  text-align: center;
+  margin-top: 2em;
+  /* Remove background/padding if you don't want a box effect */
+  background: none;
+  padding: 0;
+}
+
+#drop-zone {
+  border: 2px dashed #888;
+  padding: 2em;
+  margin: 2em auto;
+  color: #aaa;
+  max-width: 600px;
+  background: #1c1c1c; /* Optional: keeps it styled separately */
+  border-radius: 10px;  /* Optional: rounded corners */
+}
+
+#drop-zone.dragover {
+  border-color: #0f0;
+  color: #0f0;
+}
     section {
       padding: 2em;
       text-align: center;
