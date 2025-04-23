@@ -286,9 +286,12 @@ h1 {
 
   // Stop background updates and hide background
 clearInterval(bgInterval);
+
+document.getElementById('bg-main').style.display = 'none';
+document.getElementById('bg-blur').style.display = 'none';
 document.getElementById('bg-video').style.display = 'none';
-document.getElementById('bg-gif').style.display = 'none';
 document.getElementById('bg-container').style.backgroundColor = 'black';
+
 
     }
 
@@ -383,11 +386,13 @@ document.getElementById('bg-container').style.backgroundColor = 'black';
   document.getElementById("back-button").style.display = "none";
 
   // Show and resume background
+document.getElementById('bg-main').style.display = 'block';
+document.getElementById('bg-blur').style.display = 'block';
 document.getElementById('bg-video').style.display = 'block';
-document.getElementById('bg-gif').style.display = 'block';
 document.getElementById('bg-container').style.backgroundColor = '';
 changeBackground(); // instantly show something
 bgInterval = setInterval(changeBackground, 10000);
+
 
 
 }
