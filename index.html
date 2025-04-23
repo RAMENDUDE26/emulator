@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clowney's Emulator</title>
+
   <link rel="stylesheet" href="emulator.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
+
   <style>
     body {
       background: #111;
@@ -16,19 +22,33 @@
     header {
   text-align: center;
   margin-top: 2em;
-  /* Remove background/padding if you don't want a box effect */
   background: none;
   padding: 0;
 }
 
+h1 {
+      font-size: 3em;
+      font-family: "Barriecito", system-ui;
+      font-weight: 400;
+      font-style: normal;
+      margin: 20px 0;
+      padding: 10px 20px;
+      border: 2px solid white;
+      border-radius: 15px;
+      background: rgba(15, 15, 15, 0.8);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      display: inline-block;
+    }
+
 #drop-zone {
-  border: 2px dashed #888;
+  border: 2px dashed #ffffff;
   padding: 2em;
   margin: 2em auto;
-  color: #aaa;
+  color: #ffffff;
   max-width: 600px;
-  background: #1c1c1c; /* Optional: keeps it styled separately */
-  border-radius: 10px;  /* Optional: rounded corners */
+  background: rgba(15, 15, 15, 0.8);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  border-radius: 15px; 
 }
 
 #drop-zone.dragover {
@@ -116,23 +136,11 @@
   pointer-events: none;
 }
 
-
-
     #game {
       margin-top: 2em;
       text-align: center;
     }
-    #drop-zone {
-      border: 2px dashed #888;
-      padding: 2em;
-      margin: 2em auto;
-      color: #aaa;
-      max-width: 600px;
-    }
-    #drop-zone.dragover {
-      border-color: #0f0;
-      color: #0f0;
-    }
+
     select {
       padding: 0.5em;
       font-size: 1em;
@@ -147,6 +155,7 @@
 <body>
 
   <div id="bg-container">
+    <video id="bg-video" autoplay muted loop playsinline></video>
     <img id="bg-blur" alt="Blurred Background">
     <img id="bg-main" alt="Main Background">
   </div>
@@ -240,6 +249,8 @@
 </div>
 
   <script>
+    let bgInterval;
+
     let pendingROMBlob = null;
 
     function launchGame(path, core) {
@@ -272,6 +283,13 @@
   const script = document.createElement("script");
   script.src = "data/loader.js";
   document.body.appendChild(script);
+
+  // Stop background updates and hide background
+clearInterval(bgInterval);
+document.getElementById('bg-video').style.display = 'none';
+document.getElementById('bg-gif').style.display = 'none';
+document.getElementById('bg-container').style.backgroundColor = 'black';
+
     }
 
     function getExtension(filename) {
@@ -363,6 +381,15 @@
 
   // Hide the back button
   document.getElementById("back-button").style.display = "none";
+
+  // Show and resume background
+document.getElementById('bg-video').style.display = 'block';
+document.getElementById('bg-gif').style.display = 'block';
+document.getElementById('bg-container').style.backgroundColor = '';
+changeBackground(); // instantly show something
+bgInterval = setInterval(changeBackground, 10000);
+
+
 }
 
 const gifs = [
@@ -403,7 +430,8 @@ main.onload = () => main.style.opacity = 1;
 blur.onload = () => blur.style.opacity = 1;
 
 changeBackground();
-setInterval(changeBackground, 10000);
+bgInterval = setInterval(changeBackground, 10000);
+
 </script>
 </body>
 </html>
