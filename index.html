@@ -155,7 +155,6 @@ h1 {
 <body>
 
   <div id="bg-container">
-    <video id="bg-video" autoplay muted loop playsinline></video>
     <img id="bg-blur" alt="Blurred Background">
     <img id="bg-main" alt="Main Background">
   </div>
@@ -230,6 +229,7 @@ h1 {
         <button onclick="launchGame('games/Super Mario Bros (PC10).nes', 'nes')">Super Mario Bros.</button>
       </div>
     </div>
+
     <div class="game-section">
       <h3>Nintendo 64</h3>
       <div class="game-card">
@@ -241,6 +241,13 @@ h1 {
         <button onclick="launchGame('games/Super Mario 64 (U) [!].z64', 'n64')">Super Mario 64</button>
       </div>
     </div>
+
+    <div class="game-section">
+      <h3>Nintendo DS</h3>
+      <div class="game-card">
+        <img src="https://media-hosting.imagekit.io/43a4c74d7e294209/download.jpg?Expires=1840486148&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=2ENetEVUd7n1uwNSr5IYMRlw-v2IVpynC185NVyfuWjkjsHwhBR3mV1Sk4iY4MNz7ZXANXAqXG72Og0J7vAC5D4v5HVdxlxjZWpHCb2K-2thT0o8mrv9Me4IcgBdl8vuuoUduFkS-3ffsbsS2uarA62o8vNYjDGvtaQPJd-mlBuPJZJryWCM3b4weJca3CXuK7PctWjqYZMlzgECatCMs2hiXYAKmrYgdReDkxCBpsjr-YxtHD5c4l6EzEgZuNigFOikjBpEFvCZ93q2olAUj4MC5nGz26V-7KohB1cAsdEZtFx0w3iH1x6qLHPNwVtHdlNR83bG4Ua6kyV5mtT-Jg__" alt="Soul Silver">
+        <button onclick="launchGame('games/Soulsilver.nds', 'n64')">Pokemon Soul Silver</button>
+      </div>
   </section>
 
   <div id="game"></div>
@@ -263,6 +270,8 @@ h1 {
   EJS_gameUrl = path;
   EJS_startOnLoaded = true;
   EJS_fullscreen = true;
+  EJS_onloadStart = false;
+
 
   document.querySelector("header").style.display = "none";
   document.getElementById("game-list").style.display = "none";
@@ -289,7 +298,6 @@ clearInterval(bgInterval);
 
 document.getElementById('bg-main').style.display = 'none';
 document.getElementById('bg-blur').style.display = 'none';
-document.getElementById('bg-video').style.display = 'none';
 document.getElementById('bg-container').style.backgroundColor = 'black';
 
 
@@ -388,7 +396,6 @@ document.getElementById('bg-container').style.backgroundColor = 'black';
   // Show and resume background
 document.getElementById('bg-main').style.display = 'block';
 document.getElementById('bg-blur').style.display = 'block';
-document.getElementById('bg-video').style.display = 'block';
 document.getElementById('bg-container').style.backgroundColor = '';
 changeBackground(); // instantly show something
 bgInterval = setInterval(changeBackground, 10000);
