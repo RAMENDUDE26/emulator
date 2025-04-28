@@ -265,43 +265,45 @@ h1 {
     }
 
     function startEmulator(path, core) {
+  // EmulatorJS settings
   EJS_player = "#game";
   EJS_core = core;
   EJS_gameUrl = path;
   EJS_startOnLoaded = true;
   EJS_fullscreen = true;
-  EJS_onloadStart = false;
+  EJS_touchControls = false; // <-- this alone disables popup
+  EJS_pathtodata = "data/";
 
-
+  // Hide menu
   document.querySelector("header").style.display = "none";
   document.getElementById("game-list").style.display = "none";
   document.getElementById("back-button").style.display = "block";
 
+  // Create display area
   const display = document.createElement("div");
   display.id = "display";
   display.style = "width:100%; height:100%";
   document.getElementById("game").appendChild(display);
 
-  // Remove previous loader.js if it exists
+  // Remove old loader.js if exists
   const existingScript = document.querySelector('script[src="data/loader.js"]');
   if (existingScript) {
     existingScript.remove();
   }
 
-  // Add fresh loader
+  // Add new loader.js
   const script = document.createElement("script");
   script.src = "data/loader.js";
   document.body.appendChild(script);
 
-  // Stop background updates and hide background
-clearInterval(bgInterval);
+  // Stop background changing
+  clearInterval(bgInterval);
+  document.getElementById('bg-blur').style.display = 'none';
+  document.getElementById('bg-main').style.display = 'none';
+  document.getElementById('bg-container').style.backgroundColor = 'black';
+}
 
-document.getElementById('bg-main').style.display = 'none';
-document.getElementById('bg-blur').style.display = 'none';
-document.getElementById('bg-container').style.backgroundColor = 'black';
 
-
-    }
 
     function getExtension(filename) {
       return filename.split('.').pop().toLowerCase();
