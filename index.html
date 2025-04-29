@@ -155,7 +155,6 @@ h1 {
 <body>
 
   <div id="bg-container">
-    <video id="bg-video" autoplay muted loop playsinline></video>
     <img id="bg-blur" alt="Blurred Background">
     <img id="bg-main" alt="Main Background">
   </div>
@@ -202,7 +201,6 @@ h1 {
   </header>
 
   <section id="game-list">
-    <h2>🎮 Games</h2>
     <div class="game-section">
       <h3>NES</h3>
       <div class="game-card">
@@ -289,7 +287,6 @@ clearInterval(bgInterval);
 
 document.getElementById('bg-main').style.display = 'none';
 document.getElementById('bg-blur').style.display = 'none';
-document.getElementById('bg-video').style.display = 'none';
 document.getElementById('bg-container').style.backgroundColor = 'black';
 
 
@@ -388,7 +385,6 @@ document.getElementById('bg-container').style.backgroundColor = 'black';
   // Show and resume background
 document.getElementById('bg-main').style.display = 'block';
 document.getElementById('bg-blur').style.display = 'block';
-document.getElementById('bg-video').style.display = 'block';
 document.getElementById('bg-container').style.backgroundColor = '';
 changeBackground(); // instantly show something
 bgInterval = setInterval(changeBackground, 10000);
