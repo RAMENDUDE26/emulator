@@ -278,6 +278,7 @@ h1 {
   }
 
   // Add fresh loader
+  window.confirm = () => false;
   const script = document.createElement("script");
   script.src = "data/loader.js";
   document.body.appendChild(script);
