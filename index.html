@@ -259,8 +259,23 @@ h1 {
     let pendingROMBlob = null;
 
     function launchGame(path, core) {
-      startEmulator(path, core);
-    }
+  if (path.startsWith("http")) {
+    fetch(path)
+      .then(response => response.arrayBuffer())
+      .then(buffer => {
+        const blob = new Blob([buffer]);
+        const blobUrl = URL.createObjectURL(blob);
+        startEmulator(blobUrl, core);
+      })
+      .catch(err => {
+        alert("Failed to load ROM from URL.");
+        console.error(err);
+      });
+  } else {
+    startEmulator(path, core);
+  }
+}
+
 
     function startEmulator(path, core) {
   EJS_player = "#game";
