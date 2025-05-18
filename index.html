@@ -265,7 +265,6 @@ h1 {
     function startEmulator(path, core) {
   EJS_player = "#game";
   EJS_core = core;
-  EJS_gameUrl = path;
   EJS_startOnLoaded = true;
   EJS_fullscreen = true;
 
@@ -284,21 +283,32 @@ h1 {
     existingScript.remove();
   }
 
-  // Add fresh loader
+  // If the path is a remote URL, fetch it as a blob
+  if (path.startsWith("http")) {
+    fetch(path)
+      .then(res => res.blob())
+      .then(blob => {
+        EJS_gameUrl = URL.createObjectURL(blob);
+        loadEmulator();
+      });
+  } else {
+    EJS_gameUrl = path;
+    loadEmulator();
+  }
+
+  // Stop background updates and hide background
+  clearInterval(bgInterval);
+  document.getElementById('bg-main').style.display = 'none';
+  document.getElementById('bg-blur').style.display = 'none';
+  document.getElementById('bg-container').style.backgroundColor = 'black';
+}
+
+function loadEmulator() {
   window.confirm = () => false;
   const script = document.createElement("script");
   script.src = "data/loader.js";
   document.body.appendChild(script);
-
-  // Stop background updates and hide background
-clearInterval(bgInterval);
-
-document.getElementById('bg-main').style.display = 'none';
-document.getElementById('bg-blur').style.display = 'none';
-document.getElementById('bg-container').style.backgroundColor = 'black';
-
-
-    }
+}
 
     function getExtension(filename) {
       return filename.split('.').pop().toLowerCase();
